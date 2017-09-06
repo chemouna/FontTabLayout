@@ -4,7 +4,7 @@ import android.content.Context
 import android.support.design.widget.TabLayout
 import android.util.AttributeSet
 import android.util.Log
-import android.graphics.Typeface
+import android.support.v4.widget.TextViewCompat
 import android.widget.TextView
 import android.view.ViewGroup
 import android.text.TextUtils
@@ -16,6 +16,7 @@ import android.text.TextUtils
 class CustomTabLayout : TabLayout {
 
     private var tabSelectedTextAppearance: Int = 0
+    private var  tabTextAppearance: Int = 0
     private var selectedFontFamily: String? = null
 
     constructor(context: Context) : super(context) {
@@ -34,17 +35,20 @@ class CustomTabLayout : TabLayout {
         val customAttr = context.obtainStyledAttributes(attrs, R.styleable.CustomTabLayout)
         tabSelectedTextAppearance = customAttr.getResourceId(R.styleable.CustomTabLayout_tabSelectedTextAppearance,
                 R.style.TextAppearance_Design_Tab)
-        customAttr.recycle()
 
-        val textAttrs = intArrayOf(android.R.attr.fontFamily)
-        val selectedAppearance = context.obtainStyledAttributes(tabSelectedTextAppearance, textAttrs)
+        //TODO: TabLayout_tabTextAppearance is private -> find a way around it
+        tabTextAppearance = customAttr.getResourceId(R.styleable.TabLayout_tabTextAppearance, R.style.TextAppearance_Design_Tab)
+
+        customAttr.recycle()
+        /*val textAttrs = intArrayOf(android.R.attr.fontFamily)
+        val selectedAppearance = context.obtainStyledAttributes(attrs, tabSelectedTextAppearance)
 
         try {
             selectedFontFamily = selectedAppearance.getString(0)
             Log.d("TEST", "selectedFontFamily = " + selectedFontFamily)
         } catch (e: Exception) {
             Log.d("TEST", "SwiftKeyTabLayout: ")
-        }
+        }*/
 
         addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -57,7 +61,9 @@ class CustomTabLayout : TabLayout {
                 // Check if it is a TextView to fail gracefully in case TabLayout changes this positioning
                 if (textViewTabChild is TextView) {
                     // TODO: bold temp here -> should instead take the one from style
-                    textViewTabChild.typeface = Typeface.create(selectedFontFamily, Typeface.BOLD)
+                    //textViewTabChild.typeface = Typeface.create(selectedFontFamily, Typeface.BOLD)
+
+                    TextViewCompat.setTextAppearance(textViewTabChild, tabSelectedTextAppearance)
                 }
             }
 
@@ -71,7 +77,9 @@ class CustomTabLayout : TabLayout {
                 // Check if it is a TextView to fail gracefully in case TabLayout changes this positioning
                 if (textViewTabChild is TextView) {
                     // TODO: hardcoded sans-serif is temp here -> use on from TextAppearance
-                    textViewTabChild.typeface = Typeface.create("sans-serif", Typeface.NORMAL)
+                    //textViewTabChild.typeface = Typeface.create("sans-serif", Typeface.NORMAL)
+
+                    TextViewCompat.setTextAppearance(textViewTabChild, tabTextAppearance)
                 }
             }
 
