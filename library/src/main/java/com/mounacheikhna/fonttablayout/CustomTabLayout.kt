@@ -6,7 +6,6 @@ import android.util.AttributeSet
 import android.util.Log
 import android.graphics.Typeface
 import android.widget.TextView
-import sun.awt.windows.ThemeReader.getPosition
 import android.view.ViewGroup
 import android.text.TextUtils
 
@@ -51,7 +50,7 @@ class CustomTabLayout : TabLayout {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 if (TextUtils.isEmpty(selectedFontFamily) && tab == null) return
                 val tabsParentView = getChildAt(0) as ViewGroup
-                val tabView = tabsParentView.getChildAt(tab.position) as ViewGroup
+                val tabView = tabsParentView.getChildAt(tab!!.position) as ViewGroup
 
                 // At index 1 we get the TextView of the tab.
                 val textViewTabChild = tabView.getChildAt(1)
