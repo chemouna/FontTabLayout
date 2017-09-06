@@ -31,10 +31,10 @@ class CustomTabLayout : TabLayout {
     }
 
     private fun init(attrs: AttributeSet?) {
-        val customTa = context.obtainStyledAttributes(attrs, R.styleable.CustomTabLayout)
-        tabSelectedTextAppearance = customTa.getResourceId(R.styleable.CustomTabLayout_tabSelectedTextAppearance,
+        val customAttr = context.obtainStyledAttributes(attrs, R.styleable.CustomTabLayout)
+        tabSelectedTextAppearance = customAttr.getResourceId(R.styleable.CustomTabLayout_tabSelectedTextAppearance,
                 R.style.TextAppearance_Design_Tab)
-        customTa.recycle()
+        customAttr.recycle()
 
         val textAttrs = intArrayOf(android.R.attr.fontFamily)
         val selectedAppearance = context.obtainStyledAttributes(tabSelectedTextAppearance, textAttrs)

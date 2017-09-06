@@ -1,4 +1,5 @@
-<resources>
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -8,8 +9,19 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="CustomTabSelectedTextAppearance">
+    <style name="CustomTabLayoutStyle" parent="Base.Widget.Design.TabLayout">
+        <item name="tabTextAppearance">@style/CustomTabSelectedTextAppearance</item>
+        <item name="tabSelectedTextAppearance">@style/CustomTabSelectedTextAppearance</item>
+    </style>
+
+    <style name="CustomTabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+
+    <style name="CustomTabSelectedTextAppearance" parent="CustomTabTextAppearance">
         <item name="android:fontFamily">serif-monospace</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
 </resources>
