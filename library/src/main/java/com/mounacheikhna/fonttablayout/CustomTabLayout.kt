@@ -15,7 +15,6 @@ class CustomTabLayout : TabLayout {
 
     private var tabSelectedTextAppearance: Int = 0
     private var tabTextAppearance: Int = 0
-    private var selectedFontFamily: String? = null
 
     constructor(context: Context) : super(context) {
         init(null)
@@ -34,14 +33,14 @@ class CustomTabLayout : TabLayout {
         tabSelectedTextAppearance = customAttr.getResourceId(R.styleable.CustomTabLayout_tabSelectedTextAppearance,
                 R.style.TextAppearance_Design_Tab)
 
-        //TODO: TabLayout_tabTextAppearance is private -> find a way around it
-        tabTextAppearance = customAttr.getResourceId(R.styleable.TabLayout_tabTextAppearance, R.style.TextAppearance_Design_Tab)
+        //TODO: figure out how to avoid this private warning here
+        tabTextAppearance = customAttr.getResourceId(R.styleable.TabLayout_tabTextAppearance,
+                R.style.TextAppearance_Design_Tab)
 
         customAttr.recycle()
 
         addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                //TODO: handle the case where tabSelectedTextAppearance is not provided
                 updateTabTextSelectedState(tab, true)
             }
 
@@ -56,16 +55,20 @@ class CustomTabLayout : TabLayout {
 
     private fun updateTabTextSelectedState(tab: Tab?, isSelected: Boolean) {
         if (tab == null) return
+
         val tabsParentView = getChildAt(0) as ViewGroup
         val tabView = tabsParentView.getChildAt(tab.position) as ViewGroup
 
         // At index 1 we get the TextView of the tab.
         val textViewTabChild = tabView.getChildAt(1)
         if (textViewTabChild is TextView) {
-            val textAppearanceResId = if(isSelected) tabSelectedTextAppearance else tabTextAppearance
+            //TODO: figure out why tab.isSelected does not give the correct selected or not
+            var textAppearanceResId = tabTextAppearance
+            if(isSelected && tabSelectedTextAppearance != 0) {
+                textAppearanceResId = tabSelectedTextAppearance
+            }
             TextViewCompat.setTextAppearance(textViewTabChild, textAppearanceResId)
         }
     }
-
 
 }
