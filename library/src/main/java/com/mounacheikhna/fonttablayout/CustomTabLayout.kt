@@ -3,11 +3,9 @@ package com.mounacheikhna.fonttablayout
 import android.content.Context
 import android.support.design.widget.TabLayout
 import android.util.AttributeSet
-import android.util.Log
 import android.support.v4.widget.TextViewCompat
 import android.widget.TextView
 import android.view.ViewGroup
-import android.text.TextUtils
 
 
 /**
@@ -16,7 +14,7 @@ import android.text.TextUtils
 class CustomTabLayout : TabLayout {
 
     private var tabSelectedTextAppearance: Int = 0
-    private var  tabTextAppearance: Int = 0
+    private var tabTextAppearance: Int = 0
     private var selectedFontFamily: String? = null
 
     constructor(context: Context) : super(context) {
@@ -40,53 +38,33 @@ class CustomTabLayout : TabLayout {
         tabTextAppearance = customAttr.getResourceId(R.styleable.TabLayout_tabTextAppearance, R.style.TextAppearance_Design_Tab)
 
         customAttr.recycle()
-        /*val textAttrs = intArrayOf(android.R.attr.fontFamily)
-        val selectedAppearance = context.obtainStyledAttributes(attrs, tabSelectedTextAppearance)
-
-        try {
-            selectedFontFamily = selectedAppearance.getString(0)
-            Log.d("TEST", "selectedFontFamily = " + selectedFontFamily)
-        } catch (e: Exception) {
-            Log.d("TEST", "SwiftKeyTabLayout: ")
-        }*/
 
         addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                if (TextUtils.isEmpty(selectedFontFamily) && tab == null) return
-                val tabsParentView = getChildAt(0) as ViewGroup
-                val tabView = tabsParentView.getChildAt(tab!!.position) as ViewGroup
-
-                // At index 1 we get the TextView of the tab.
-                val textViewTabChild = tabView.getChildAt(1)
-                // Check if it is a TextView to fail gracefully in case TabLayout changes this positioning
-                if (textViewTabChild is TextView) {
-                    // TODO: bold temp here -> should instead take the one from style
-                    //textViewTabChild.typeface = Typeface.create(selectedFontFamily, Typeface.BOLD)
-
-                    TextViewCompat.setTextAppearance(textViewTabChild, tabSelectedTextAppearance)
-                }
+                //TODO: handle the case where tabSelectedTextAppearance is not provided
+                updateTabTextSelectedState(tab, true)
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
-                if (tab == null) return
-                val tabsParentView = getChildAt(0) as ViewGroup
-                val tabView = tabsParentView.getChildAt(tab.position) as ViewGroup
-
-                // At index 1 we get the TextView of the tab.
-                val textViewTabChild = tabView.getChildAt(1)
-                // Check if it is a TextView to fail gracefully in case TabLayout changes this positioning
-                if (textViewTabChild is TextView) {
-                    // TODO: hardcoded sans-serif is temp here -> use on from TextAppearance
-                    //textViewTabChild.typeface = Typeface.create("sans-serif", Typeface.NORMAL)
-
-                    TextViewCompat.setTextAppearance(textViewTabChild, tabTextAppearance)
-                }
+                updateTabTextSelectedState(tab, false)
             }
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
-
             }
         })
+    }
+
+    private fun updateTabTextSelectedState(tab: Tab?, isSelected: Boolean) {
+        if (tab == null) return
+        val tabsParentView = getChildAt(0) as ViewGroup
+        val tabView = tabsParentView.getChildAt(tab.position) as ViewGroup
+
+        // At index 1 we get the TextView of the tab.
+        val textViewTabChild = tabView.getChildAt(1)
+        if (textViewTabChild is TextView) {
+            val textAppearanceResId = if(isSelected) tabSelectedTextAppearance else tabTextAppearance
+            TextViewCompat.setTextAppearance(textViewTabChild, textAppearanceResId)
+        }
     }
 
 
